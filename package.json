@@ -1,0 +1,15 @@
+{
+  "name": "reciping-backend",
+  "version": "1.0.0",
+  "description": "reciping api for consuming",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "gustavo dias",
+  "license": "ISC",
+  "dependencies": {
+    "express": "^4.18.3",
+    "mongoose": "^8.2.0"
+  }
+}
