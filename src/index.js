@@ -6,9 +6,10 @@ const app = express();
 app.use(express.json());
 const port = 3000;
 
-console.log("DB_URL:", process.env.DB_URL);
+const mongURI = process.env.DB_URL;
+
 mongoose
-  .connect(process.env.DB_URL)
+  .connect(mongURI)
   .then(() => console.log("Connected to MongoDB"))
   .catch((err) => console.error("Error connecting to MongoDB:", err));
 
@@ -21,13 +22,14 @@ const Recipe = mongoose.model("Recipe", {
   user_id: String,
 });
 
-app.get("/", (req, res) => {
+app.get("/", async (req, res) => {
+  const films = await Film.find()
   res.send("Hello World!");
 });
 
 app.post("/", async (req, res) => {
   try {
-    const recipe = new Recipe({
+    const recipes = new Recipe({
       title: req.body.title,
       description: req.body.description,
       ingredients: req.body.ingredients,
@@ -36,7 +38,7 @@ app.post("/", async (req, res) => {
       user_id: req.body.user_id,
     });
 
-    const savedRecipe = await recipe.save();
+    const savedRecipe = await recipes.save();
     res.send(savedRecipe);
   } catch (error) {
     console.error("Error saving recipe:", error);
