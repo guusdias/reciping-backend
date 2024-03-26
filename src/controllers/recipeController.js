@@ -1,4 +1,4 @@
-import {recipe} from "../models/Recipe.js";
+import { recipe } from "../models/Recipe.js";
 
 class RecipeController {
   static async listingRecipies(req, res) {
@@ -58,6 +58,18 @@ class RecipeController {
       res
         .status(500)
         .json({ message: `${erro.message} - falha na requisição da receita` });
+    }
+  }
+
+  static async listingRecipiesByIngredients() {
+    const ingredient = req.query.ingredients;
+    try {
+      const recipeByIngredient = await recipe.find({
+        mainIngredient: ingredient,
+      });
+      res.status(200).json(recipeByIngredient);
+    } catch (erro) {
+      res.status(500).json({ message: `${erro.message} - falha na busca` });
     }
   }
 }
