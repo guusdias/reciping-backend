@@ -1,35 +1,35 @@
 import { user } from "../models/User.js";
-import pkg from "bcryptjs";
-const { compare } = pkg;
 import sla from "jsonwebtoken";
 const { sign } = sla;
-import psw from "../config/jsonSecret.js";
+import bcrypt from "bcryptjs";
 
 class AuthService {
   async login(dto) {
-    const userMain = await user.findOne({
-      attributes: ["id", "email", "password"],
-      where: {
-        email: dto.email,
-      },
+    const usuarios = await user.find({
+      email: dto.email,
     });
 
-    if (!userMain) {
-      throw new Error("user não cadastrado");
+    if (usuarios.length === 0) {
+      throw new Error("Usuário não cadastrado" + usuarios);
     }
 
-    const samePwd = await compare(dto.password, userMain.password);
+    const usuario = usuarios[0]; // Supondo que haja apenas um usuário com o email fornecido
 
+    const samePwd = await bcrypt.compare(dto.password, usuario.password);
+
+    if (dto.password == usuario.password) {
+      console.log("tá certo");
+    }
     if (!samePwd) {
-      throw new Error("user ou senha invalido");
+      throw new Error(+" Usuário ou senha inválidos");
     }
 
     const accessToken = sign(
       {
-        id: userMain.id,
-        email: userMain.email,
+        id: usuario.id,
+        email: usuario.email,
       },
-      pwd.secret,
+      process.env.JSON_SECRET,
       {
         expiresIn: 86400,
       }

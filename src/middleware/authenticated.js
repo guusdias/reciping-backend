@@ -1,7 +1,6 @@
 import { verify, decode } from "jsonwebtoken";
-import psw from "../config/jsonSecret.js";
 
-module.exports = async (req, res, next) => {
+export default async (req, res, next) => {
   const token = req.headers.authorization;
 
   if (!token) {
@@ -11,12 +10,12 @@ module.exports = async (req, res, next) => {
   const [, accessToken] = token.split(" ");
 
   try {
-    verify(accessToken, pwd.secret);
+    verify(accessToken, process.env.JSON_SECRET);
 
     const { id, email } = await decode(accessToken);
 
-    req.usuarioId = id;
-    req.usuarioEmail = email;
+    req.userId = id;
+    req.userEmail = email;
 
     return next();
   } catch (error) {

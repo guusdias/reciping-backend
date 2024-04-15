@@ -1,5 +1,6 @@
 import { recipe } from "../models/Recipe.js";
 import { user } from "../models/User.js";
+import bcrypt from "bcryptjs";
 
 class UserController {
   static async listingUsers(req, res) {
@@ -30,14 +31,18 @@ class UserController {
     try {
       const foundRecipe = await recipe.findById(newUser.recipes);
       const fullUser = { ...newUser, recipes: { ...foundRecipe._doc } };
+
+      const hashedPassword = await bcrypt.hash(fullUser.password, 10);
+      fullUser.password = hashedPassword;
+
       const createdUser = await user.create(fullUser);
       res
         .status(201)
         .json({ message: "user criado com sucesso", user: createdUser });
-    } catch (erro) {
+    } catch (error) {
       res
         .status(500)
-        .json({ message: `${erro.message} - falha ao cadastrar user` });
+        .json({ message: `${error.message} - falha ao cadastrar user` });
     }
   }
 
