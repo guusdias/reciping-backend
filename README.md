@@ -1,6 +1,5 @@
-# Backend Documentation
+# Project Structure
 
-## Project Structure
 <pre>
 Project Structure
 ├── app.js
