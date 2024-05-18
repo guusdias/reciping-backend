@@ -1,7 +1,8 @@
 # Backend Documentation
 
 ## Project Structure
-
+<pre>
+Project Structure
 ├── app.js
 ├── config
 │   └── dbConnect.js
@@ -16,3 +17,4 @@
     ├── index.js
     ├── recipeRoute.js
     └── userRoutes.js
+</pre>
