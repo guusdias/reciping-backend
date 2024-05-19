@@ -8,7 +8,7 @@
     "dev": "node server.js",
     "test": "echo \"Error: no test specified\" && exit 1",
     "swagger": "node ./swagger.js",
-    "test:controller:user": "node --experimental-vm-modules node_modules/jest/bin/jest.js --testPathPattern=src/test/controller/userController.test.js"
+    "test:service:auth": "node --experimental-vm-modules node_modules/jest/bin/jest.js --testPathPattern=src/test/services/authService.test.js"
   },
   "author": "gustavo dias",
   "license": "ISC",
