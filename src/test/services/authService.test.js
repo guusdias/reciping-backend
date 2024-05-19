@@ -46,7 +46,7 @@ describe("AuthController login", () => {
 
   it("deve fazer login com sucesso e retornar um token", async () => {
     const response = await request(app)
-      .post("/auth/login")
+      .post("/api/auth/login")
       .send({ email: validUser.email, password: "password123" });
 
     expect(response.status).toBe(200);
@@ -55,7 +55,7 @@ describe("AuthController login", () => {
 
   it("deve falhar ao fazer login com senha inválida", async () => {
     const response = await request(app)
-      .post("/auth/login")
+      .post("/api/auth/login")
       .send({ email: validUser.email, password: "wrongpassword" });
 
     expect(response.status).toBe(401);
@@ -67,7 +67,7 @@ describe("AuthController login", () => {
 
   it("deve falhar ao fazer login com email não cadastrado", async () => {
     const response = await request(app)
-      .post("/auth/login")
+      .post("/api/auth/login")
       .send({ email: "notregistered@example.com", password: "password123" });
 
     expect(response.status).toBe(401);
