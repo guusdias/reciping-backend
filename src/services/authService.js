@@ -13,7 +13,7 @@ class AuthService {
       throw new Error("Usuário não cadastrado" + usuarios);
     }
 
-    const usuario = usuarios[0]; // Supondo que haja apenas um usuário com o email fornecido
+    const usuario = usuarios[0];
 
     const samePwd = await bcrypt.compare(dto.password, usuario.password);
 
