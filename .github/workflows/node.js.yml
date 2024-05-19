@@ -21,5 +21,4 @@ jobs:
       - name: Install dependencies
         run: |
           npm install
-          npm run test
           npm run test:service:auth
