@@ -1,19 +1,26 @@
 # Project Structure
 
 <pre>
-Project Structure
 ├── app.js
 ├── config
 │   └── dbConnect.js
 ├── controllers
+│   ├── authController.js
 │   ├── recipeController.js
 │   └── userController.js
+├── middleware
+│   └── authenticated.js
 ├── models
 │   ├── Recipe.js
 │   └── User.js
-└── routes
-    ├── authRoutes.js
-    ├── index.js
-    ├── recipeRoute.js
-    └── userRoutes.js
+├── routes
+│   ├── authRoute.js
+│   ├── index.js
+│   ├── recipeRoute.js
+│   └── userRoutes.js
+├── services
+│   └── authService.js
+└── test
+    └── services
+        └── authService.test.js
 </pre>
