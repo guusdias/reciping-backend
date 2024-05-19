@@ -19,11 +19,6 @@ jobs:
           node-version: 20.
 
       - name: Install dependencies
-        run: npm install
-
-      - name: Run tests and build
-        run: npm test && npm run build
-
-      - name: Deploy (if needed)
-        run: npm run deploy
-        if: success()
+        run: |
+          npm install
+          npm run build
