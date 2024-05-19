@@ -14,6 +14,38 @@ class UserController {
     }
   }
 
+  static async getRecipesByUser(req, res) {
+    try {
+      const userId = req.params.id;
+
+      const userFound = await user.findById(userId);
+
+      if (!userFound) {
+        return res.status(404).json({ message: "Usuário não encontrado" });
+      }
+
+      const recipes = userFound.recipes;
+
+      if (recipes.length === 0) {
+        return res.status(200).json({ recipes: [] });
+      }
+
+      const recipeDetails = await recipe.find({ _id: { $in: recipes } });
+
+      const combinedRecipes = recipeDetails.map((recipeDetail) => {
+        return {
+          ...recipeDetail._doc,
+          userId: userId,
+        };
+      });
+
+      res.status(200).json({ recipes: combinedRecipes });
+    } catch (error) {
+      console.error(error);
+      res.status(500).json({ message: "Erro ao obter receitas" });
+    }
+  }
+
   static async listingUserByID(req, res) {
     try {
       const id = req.params.id;
