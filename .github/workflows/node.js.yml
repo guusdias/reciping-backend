@@ -1,4 +1,4 @@
-name: Node CI
+name: Node.js
 
 on:
   push:
@@ -7,16 +7,16 @@ on:
     branches: ["*"]
 
 jobs:
-  build:
+  continuos-integration:
     runs-on: ubuntu-latest
 
     steps:
       - uses: actions/checkout@v3 # Upgrade to v3 for Node.js 20 support
 
       - name: Use Node.js 20.x
-        uses: actions/setup-node@v3 # Upgrade to v3 for Node.js 20 support
+        uses: actions/setup-node@v2 # Upgrade to v3 for Node.js 20 support
         with:
-          node-version: "20.x"
+          node-version: 20.
 
       - name: Install dependencies
         run: npm install
