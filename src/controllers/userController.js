@@ -58,6 +58,33 @@ class UserController {
     }
   }
 
+  static async getAllRecipes(req, res) {
+    try {
+      // Busca todas as receitas da coleção 'users'
+      const usersWithRecipes = await user.find({});
+
+      // Extrai as receitas de cada usuário e as combina em um único array
+      const allRecipes = usersWithRecipes.map((user) => user.recipes).flat();
+
+      if (allRecipes.length === 0) {
+        return res.status(200).json({ recipes: [] });
+      }
+
+      // Mapeia as receitas para incluir o ID do usuário (opcional)
+      const mappedRecipes = allRecipes.map((recipe) => {
+        return {
+          ...recipe,
+          //userId: recipe.id, Se 'userId' estiver presente no modelo 'recipe'
+        };
+      });
+
+      res.status(200).json({ recipes: mappedRecipes });
+    } catch (error) {
+      console.error(error);
+      res.status(500).json({ message: "Erro ao obter receitas" });
+    }
+  }
+
   static async registerUser(req, res) {
     const newUser = req.body;
     try {
