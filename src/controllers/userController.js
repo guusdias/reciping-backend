@@ -60,21 +60,17 @@ class UserController {
 
   static async getAllRecipes(req, res) {
     try {
-      // Busca todas as receitas da coleção 'users'
       const usersWithRecipes = await user.find({});
 
-      // Extrai as receitas de cada usuário e as combina em um único array
       const allRecipes = usersWithRecipes.map((user) => user.recipes).flat();
 
       if (allRecipes.length === 0) {
         return res.status(200).json({ recipes: [] });
       }
 
-      // Mapeia as receitas para incluir o ID do usuário (opcional)
       const mappedRecipes = allRecipes.map((recipe) => {
         return {
           ...recipe,
-          //userId: recipe.id, Se 'userId' estiver presente no modelo 'recipe'
         };
       });
 
@@ -88,8 +84,12 @@ class UserController {
   static async registerUser(req, res) {
     const newUser = req.body;
     try {
-      const foundRecipe = await recipe.findById(newUser.recipes);
-      const fullUser = { ...newUser, recipes: { ...foundRecipe._doc } };
+      const createdRecipe = await recipe.create(newUser.recipes);
+
+      const fullUser = {
+        ...newUser,
+        recipes: createdRecipe._id,
+      };
 
       const hashedPassword = await bcrypt.hash(fullUser.password, 10);
       fullUser.password = hashedPassword;
@@ -97,7 +97,7 @@ class UserController {
       const createdUser = await user.create(fullUser);
       res
         .status(201)
-        .json({ message: "user criado com sucesso", user: createdUser });
+        .json({ message: "User created successfully", user: createdUser });
     } catch (error) {
       res
         .status(500)

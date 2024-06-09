@@ -20,6 +20,7 @@ class AuthService {
     if (dto.password == usuario.password) {
       console.log("tá certo");
     }
+
     if (!samePwd) {
       throw new Error(+" Usuário ou senha inválidos");
     }

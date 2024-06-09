@@ -1,5 +1,5 @@
 import mongoose from "mongoose";
-import { recipeSchema } from "./Recipe.js"
+import { recipeSchema } from "./Recipe.js";
 
 const userSchema = new mongoose.Schema(
   {
@@ -7,11 +7,11 @@ const userSchema = new mongoose.Schema(
     user_name: { type: String, required: true },
     email: { type: String, required: true },
     password: { type: String, required: true },
-    recipes: recipeSchema,
+    recipes: [recipeSchema],
   },
   { versionKey: false }
 );
 
-const user = mongoose.model("users", userSchema)
+const user = mongoose.model("users", userSchema);
 
-export { user, userSchema }
+export { user, userSchema };

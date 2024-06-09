@@ -3,11 +3,11 @@ import mongoose from "mongoose";
 const recipeSchema = new mongoose.Schema(
   {
     id: { type: mongoose.Schema.Types.ObjectId },
-    title: { type: String, required: true },
+    title: { type: String },
     description: { type: String },
-    mainIngredient: { type: String, required: true },
-    ingredients: { type: String, required: true },
-    instructions: { type: String, required: true },
+    mainIngredient: { type: String },
+    ingredients: { type: String },
+    instructions: { type: String },
     img_url: { type: String },
   },
   { versionKey: false }
