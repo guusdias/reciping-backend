@@ -1,28 +1,27 @@
 import { user } from "../models/User.js";
-import sla from "jsonwebtoken";
-const { sign } = sla;
+import jwt from "jsonwebtoken";
+const { sign } = jwt;
 import bcrypt from "bcryptjs";
 
 class AuthService {
   async login(dto) {
-    const usuarios = await user.find({
-      email: dto.email,
-    });
+    console.log("Iniciando processo de login para:", dto.email);
+
+    const usuarios = await user.find({ email: dto.email });
+    console.log("Usuários encontrados:", usuarios);
 
     if (usuarios.length === 0) {
-      throw new Error("Usuário não cadastrado" + usuarios);
+      throw new Error("Usuário não cadastrado");
     }
 
     const usuario = usuarios[0];
+    console.log("Usuário encontrado:", usuario);
 
     const samePwd = await bcrypt.compare(dto.password, usuario.password);
-
-    if (dto.password == usuario.password) {
-      console.log("tá certo");
-    }
+    console.log("Comparação de senha:", samePwd);
 
     if (!samePwd) {
-      throw new Error(+" Usuário ou senha inválidos");
+      throw new Error("Usuário ou senha inválidos");
     }
 
     const accessToken = sign(
@@ -36,7 +35,8 @@ class AuthService {
       }
     );
 
-    return { accessToken };
+    console.log("Token gerado:", accessToken);
+    return { token: accessToken };
   }
 }
 
