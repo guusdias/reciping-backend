@@ -3,7 +3,15 @@ import express from "express";
 import routes from "./routes/index.js";
 import cors from "cors";
 import swaggerUi from "swagger-ui-express";
-import swaggerFile from "../swagger-output.json" assert { type: "json" };
+import { readFileSync } from "fs";
+import { fileURLToPath } from "url";
+import { dirname, join } from "path";
+
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = dirname(__filename);
+
+const swaggerFilePath = join(__dirname, "../swagger-output.json");
+const swaggerFile = JSON.parse(readFileSync(swaggerFilePath, "utf8"));
 
 const connection = await connectDatabase();
 
