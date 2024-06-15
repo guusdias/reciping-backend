@@ -36,7 +36,16 @@ class AuthService {
     );
 
     console.log("Token gerado:", accessToken);
-    return { token: accessToken };
+
+    return {
+      token: accessToken,
+      user: {
+        id: usuario.id,
+        user_name: usuario.user_name,
+        email: usuario.email,
+        user_img: usuario.user_img,
+      },
+    };
   }
 }
 
