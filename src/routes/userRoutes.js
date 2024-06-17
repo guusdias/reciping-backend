@@ -10,5 +10,8 @@ routes.get("/user/recipes/all", UserController.getAllRecipes);
 routes.post("/user", UserController.registerUser);
 routes.put("/user/:id", UserController.updateUser);
 routes.delete("/user/:id", UserController.deleteUser);
+routes.post("/users/:id/recipes", UserController.addRecipe);
+routes.put("/users/:userId/recipes/:recipeId", UserController.updateRecipe);
+routes.delete("/users/:userId/recipes/:recipeId", UserController.deleteRecipe);
 
 export default routes;

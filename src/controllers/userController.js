@@ -3,6 +3,95 @@ import { user } from "../models/User.js";
 import bcrypt from "bcryptjs";
 
 class UserController {
+  static async addRecipe(req, res) {
+    try {
+      const userId = req.params.id;
+      const newRecipe = req.body;
+
+      const userFound = await user.findById(userId);
+
+      if (!userFound) {
+        return res.status(404).json({ message: "Usuário não encontrado" });
+      }
+
+      userFound.recipes.push(newRecipe);
+      await userFound.save();
+
+      res.status(201).json({
+        message: "Receita adicionada com sucesso",
+        recipes: userFound.recipes,
+      });
+    } catch (error) {
+      res
+        .status(500)
+        .json({ message: `${error.message} - falha ao adicionar receita` });
+    }
+  }
+
+  static async updateRecipe(req, res) {
+    try {
+      const userId = req.params.userId;
+      const recipeId = req.params.recipeId;
+      const updatedRecipe = req.body;
+
+      const userFound = await user.findById(userId);
+
+      if (!userFound) {
+        return res.status(404).json({ message: "Usuário não encontrado" });
+      }
+
+      const recipeIndex = userFound.recipes.findIndex((r) =>
+        r._id.equals(recipeId)
+      );
+
+      if (recipeIndex === -1) {
+        return res.status(404).json({ message: "Receita não encontrada" });
+      }
+
+      userFound.recipes[recipeIndex] = {
+        ...userFound.recipes[recipeIndex]._doc,
+        ...updatedRecipe,
+      };
+      await userFound.save();
+
+      res.status(200).json({
+        message: "Receita atualizada com sucesso",
+        recipes: userFound.recipes,
+      });
+    } catch (error) {
+      res
+        .status(500)
+        .json({ message: `${error.message} - falha ao atualizar receita` });
+    }
+  }
+
+  static async deleteRecipe(req, res) {
+    try {
+      const userId = req.params.userId;
+      const recipeId = req.params.recipeId;
+
+      const userFound = await user.findById(userId);
+
+      if (!userFound) {
+        return res.status(404).json({ message: "Usuário não encontrado" });
+      }
+
+      userFound.recipes = userFound.recipes.filter(
+        (r) => !r._id.equals(recipeId)
+      );
+      await userFound.save();
+
+      res.status(200).json({
+        message: "Receita excluída com sucesso",
+        recipes: userFound.recipes,
+      });
+    } catch (error) {
+      res
+        .status(500)
+        .json({ message: `${error.message} - falha ao excluir receita` });
+    }
+  }
+
   static async listingUsers(req, res) {
     try {
       const userList = await user.find({});
