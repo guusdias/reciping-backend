@@ -25,10 +25,13 @@ connection.once("open", () => {
 });
 
 
+logger.trace('Esta é uma mensagem de rastreamento');
+logger.debug('Este é um log de depuração');
 logger.info('Aplicação iniciada com sucesso');
+logger.notice('Isto é uma notificação');
 logger.warn('Esta é uma mensagem de aviso');
-logger.error('Erro ao conectar ao banco de dados');
-
+logger.error('Este é um log de erro');
+logger.fatal('Este é um log fatal');
 
 
 const app = express();
