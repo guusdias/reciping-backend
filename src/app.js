@@ -5,6 +5,7 @@ import cors from "cors";
 import swaggerUi from "swagger-ui-express";
 import { readFileSync } from "fs";
 import { fileURLToPath } from "url";
+import logger from './config/logger.js';
 import { dirname, join } from "path";
 
 const __filename = fileURLToPath(import.meta.url);
@@ -22,6 +23,13 @@ connection.on("error", (error) => {
 connection.once("open", () => {
   console.log("conexão com DB feita com sucesso");
 });
+
+
+logger.info('Aplicação iniciada com sucesso');
+logger.warn('Esta é uma mensagem de aviso');
+logger.error('Erro ao conectar ao banco de dados');
+
+
 
 const app = express();
 app.use(cors());
