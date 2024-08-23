@@ -159,7 +159,13 @@ class UserController {
 
   static async registerUser(req, res) {
     const newUser = req.body;
+
     try {
+      const existingUser = await user.findOne({ email: newUser.email });
+      if (existingUser) {
+        return res.status(400).json({ message: "Usuário já existe" });
+      }
+
       const createdRecipe = await recipe.create(newUser.recipes);
 
       const fullUser = {
@@ -173,14 +179,13 @@ class UserController {
       const createdUser = await user.create(fullUser);
       res
         .status(201)
-        .json({ message: "User created successfully", user: createdUser });
+        .json({ message: "User criado com sucesso", user: createdUser });
     } catch (error) {
       res
         .status(500)
-        .json({ message: `${error.message} - falha ao cadastrar user` });
+        .json({ message: `${error.message} - falha ao cadastrar usuário` });
     }
   }
-
   static async updateUser(req, res) {
     try {
       const id = req.params.id;
