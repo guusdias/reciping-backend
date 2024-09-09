@@ -1,18 +1,19 @@
 import mongoose from "mongoose";
 
-const recipeSchema = new mongoose.Schema(
+const debtSchema = new mongoose.Schema(
   {
     id: { type: mongoose.Schema.Types.ObjectId },
-    title: { type: String },
-    description: { type: String },
-    mainIngredient: { type: String },
-    ingredients: { type: String },
-    instructions: { type: String },
-    img_url: { type: String },
+    person: { type: String, required: true },
+    value: { type: Number, required: true },
+    createdAt: { type: Date, default: Date.now },
+    updatedAt: { type: Date, default: Date.now },
   },
-  { versionKey: false }
+  {
+    versionKey: false,
+    timestamps: { createdAt: "createdAt", updatedAt: "updatedAt" },
+  }
 );
 
-const recipe = mongoose.model("recipes", recipeSchema);
+const Debt = mongoose.model("Debts", debtSchema);
 
-export { recipe, recipeSchema };
+export { Debt, debtSchema };

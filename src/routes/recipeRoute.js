@@ -1,13 +1,11 @@
 import express from "express";
-import RecipeController from "../controllers/recipeController.js";
+import DebtController from "../controllers/recipeController.js";
 
 const routes = express.Router();
 
-routes.get("/recipes", RecipeController.listingRecipies);
-routes.get("/recipes/search", RecipeController.listingRecipiesByIngredients);
-routes.get("/recipes/:id", RecipeController.listingRecipeByID);
-routes.post("/recipes", RecipeController.registerRecipe);
-routes.put("/recipes/:id", RecipeController.updateRecipe);
-routes.delete("/recipes/:id", RecipeController.deleteRecipe);
+routes.get("/debts", DebtController.getAllDebts);
+routes.post("/debts", DebtController.addDebt);
+routes.put("/debts/:id", DebtController.updateDebt);
+routes.delete("/debts/:id", DebtController.deleteDebt);
 
 export default routes;

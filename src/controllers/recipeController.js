@@ -1,77 +1,67 @@
-import { recipe } from "../models/Recipe.js";
+import { Debt } from "../models/Recipe.js";
 
-class RecipeController {
-  static async listingRecipies(req, res) {
+class DebtController {
+  static async getAllDebts(req, res) {
     try {
-      const recipiesList = await recipe.find({});
-      res.status(200).json(recipiesList);
-    } catch (erro) {
-      res
-        .status(500)
-        .json({ message: `${erro.message} - falha na requisição` });
+      const debts = await Debt.find();
+      res.status(200).json(debts);
+    } catch (error) {
+      res.status(500).json({ message: "Erro ao buscar dívidas", error });
     }
   }
 
-  static async listingRecipeByID(req, res) {
-    try {
-      const id = req.params.id;
-      const foundRecipe = await recipe.findById(id);
-      res.status(200).json(foundRecipe);
-    } catch (erro) {
-      res
-        .status(500)
-        .json({ message: `${erro.message} - falha na requisição da receita` });
-    }
-  }
+  static async addDebt(req, res) {
+    const { person, value } = req.body;
 
-  static async registerRecipe(req, res) {
     try {
-      const newRecipe = await recipe.create(req.body);
-      res
-        .status(201)
-        .json({ message: "criada com sucesso", recipe: newRecipe });
-    } catch (erro) {
-      res
-        .status(500)
-        .json({ message: `${erro.message} - falha ao cadastrar receita` });
-    }
-  }
-
-  static async updateRecipe(req, res) {
-    try {
-      const id = req.params.id;
-      await recipe.findByIdAndUpdate(id, req.body);
-      res.status(200).json({ message: "receita atualizada" });
-    } catch (erro) {
-      res
-        .status(500)
-        .json({ message: `${erro.message} - falha na requisição da receita` });
-    }
-  }
-
-  static async deleteRecipe(req, res) {
-    try {
-      const id = req.params.id;
-      await recipe.findByIdAndDelete(id);
-      res.status(200).json({ message: "receita deletada" });
-    } catch (erro) {
-      res
-        .status(500)
-        .json({ message: `${erro.message} - falha na requisição da receita` });
-    }
-  }
-
-  static async listingRecipiesByIngredients() {
-    const ingredient = req.query.ingredients;
-    try {
-      const recipeByIngredient = await recipe.find({
-        mainIngredient: ingredient,
+      const newDebt = new Debt({
+        person,
+        value,
       });
-      res.status(200).json(recipeByIngredient);
-    } catch (erro) {
-      res.status(500).json({ message: `${erro.message} - falha na busca` });
+
+      await newDebt.save();
+      res.status(201).json(newDebt);
+    } catch (error) {
+      res.status(500).json({ message: "Erro ao criar nova dívida", error });
+    }
+  }
+
+  static async updateDebt(req, res) {
+    const { id } = req.params;
+    const { value } = req.body;
+
+    try {
+      const updatedDebt = await Debt.findByIdAndUpdate(
+        id,
+        { value },
+        { new: true }
+      );
+
+      if (!updatedDebt) {
+        return res.status(404).json({ message: "Dívida não encontrada" });
+      }
+
+      res.status(200).json(updatedDebt);
+    } catch (error) {
+      res.status(500).json({ message: "Erro ao atualizar dívida", error });
+    }
+  }
+
+  static async deleteDebt(req, res) {
+    const { id } = req.params;
+
+    try {
+      const deletedDebt = await Debt.findByIdAndDelete(id);
+
+      if (!deletedDebt) {
+        return res.status(404).json({ message: "Dívida não encontrada" });
+      }
+
+      res.status(200).json({ message: "Dívida deletada com sucesso" });
+    } catch (error) {
+      res.status(500).json({ message: "Erro ao deletar dívida", error });
     }
   }
 }
 
-export default RecipeController;
+export default DebtController;

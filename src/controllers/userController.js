@@ -1,4 +1,4 @@
-import { recipe } from "../models/Recipe.js";
+import { recipe } from "../models/OldRecipe.js";
 import { user } from "../models/User.js";
 import bcrypt from "bcryptjs";
 
