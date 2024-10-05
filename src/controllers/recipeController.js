@@ -75,9 +75,9 @@ class DebtController {
     }
   }
 
-  static async getTotalDebtsByPersonAndMonth(req, res) {
+  static async getDebtsByMonthAndYear(req, res) {
     try {
-      const { year, month, page = 1, limit = 20 } = req.query;
+      const { year, month, page = 1, limit = 10 } = req.query;
       const pageNumber = parseInt(page, 10);
       const pageSize = parseInt(limit, 10);
 
@@ -92,17 +92,9 @@ class DebtController {
 
       const totalDebts = await Debt.countDocuments(matchFilter);
 
-      const debts = await Debt.aggregate([
-        { $match: matchFilter },
-        {
-          $group: {
-            _id: "$person",
-            totalValue: { $sum: "$value" },
-          },
-        },
-        { $skip: (pageNumber - 1) * pageSize },
-        { $limit: pageSize },
-      ]);
+      const debts = await Debt.find(matchFilter)
+        .skip((pageNumber - 1) * pageSize)
+        .limit(pageSize);
 
       res.status(200).json({
         debts,
@@ -111,7 +103,7 @@ class DebtController {
         totalDebts,
       });
     } catch (error) {
-      res.status(500).json({ message: "Erro ao calcular valores", error });
+      res.status(500).json({ message: "Erro ao buscar dívidas", error });
     }
   }
 }
