@@ -106,6 +106,39 @@ class DebtController {
       res.status(500).json({ message: "Erro ao buscar dívidas", error });
     }
   }
+
+  static async getTotalDebtsByPersonAndMonth(req, res) {
+    try {
+      const { year, month } = req.query;
+
+      if (!year || !month) {
+        return res.status(400).json({ message: "Ano e mês são obrigatórios." });
+      }
+
+      const debtsSummary = await Debt.aggregate([
+        {
+          $match: {
+            $expr: {
+              $and: [
+                { $eq: [{ $month: "$createdAt" }, parseInt(month)] },
+                { $eq: [{ $year: "$createdAt" }, parseInt(year)] },
+              ],
+            },
+          },
+        },
+        {
+          $group: {
+            _id: "$person",
+            totalValue: { $sum: "$value" },
+          },
+        },
+      ]);
+
+      res.status(200).json(debtsSummary);
+    } catch (error) {
+      res.status(500).json({ message: "Erro ao calcular valores", error });
+    }
+  }
 }
 
 export default DebtController;
