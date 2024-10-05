@@ -3,8 +3,20 @@ import { Debt } from "../models/Recipe.js";
 class DebtController {
   static async getAllDebts(req, res) {
     try {
-      const debts = await Debt.find();
-      res.status(200).json(debts);
+      const page = parseInt(req.query.page) || 1;
+      const limit = 10;
+      const skip = (page - 1) * limit;
+
+      const debts = await Debt.find().skip(skip).limit(limit);
+
+      const totalDebts = await Debt.countDocuments();
+
+      res.status(200).json({
+        debts,
+        currentPage: page,
+        totalPages: Math.ceil(totalDebts / limit),
+        totalDebts,
+      });
     } catch (error) {
       res.status(500).json({ message: "Erro ao buscar dívidas", error });
     }
