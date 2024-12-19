@@ -33,14 +33,15 @@ logger.warn('Esta é uma mensagem de aviso');
 logger.error('Este é um log de erro');
 logger.fatal('Este é um log fatal');
 
+const app = express();
+app.use(cors());
+app.use("/doc", swaggerUi.serve, swaggerUi.setup(swaggerFile));
+
 app.get('/ping', (req, res) => {
   logger.info('Ping recebido');
   res.status(200).send('pong');
 });
 
-const app = express();
-app.use(cors());
-app.use("/doc", swaggerUi.serve, swaggerUi.setup(swaggerFile));
 routes(app);
 
 function setupPing(serverUrl) {
