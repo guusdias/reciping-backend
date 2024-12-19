@@ -33,10 +33,27 @@ logger.warn('Esta é uma mensagem de aviso');
 logger.error('Este é um log de erro');
 logger.fatal('Este é um log fatal');
 
+app.get('/ping', (req, res) => {
+  logger.info('Ping recebido');
+  res.status(200).send('pong');
+});
 
 const app = express();
 app.use(cors());
 app.use("/doc", swaggerUi.serve, swaggerUi.setup(swaggerFile));
 routes(app);
 
-export default app;
+function setupPing(serverUrl) {
+  const pingInterval = 14 * 60 * 1000;
+  
+  setInterval(() => {
+    http.get(`${serverUrl}/ping`, (res) => {
+      logger.info(`Ping realizado em ${new Date().toISOString()}`);
+    }).on('error', (err) => {
+      logger.error('Erro no auto-ping:', err.message);
+    });
+  }, pingInterval);
+}
+
+
+export { app, setupPing };

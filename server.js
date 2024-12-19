@@ -1,12 +1,12 @@
 import "dotenv/config";
-import app from "./src/app.js";
+import { app, setupPing } from "./src/app.js";
 
-const PORT = 4000;
-
-app.listen(3000, () => {
-  console.log("API documentation: http://localhost:3000/doc");
-});
+const PORT = process.env.PORT || 4000;
 
 app.listen(PORT, () => {
-  console.log("servidor escutando!", PORT);
+  console.log(`Servidor escutando na porta ${PORT}!`);
+  console.log(`API documentation: http://localhost:${PORT}/doc`);
+
+  const serverUrl = process.env.SERVER_URL || `http://localhost:${PORT}`;
+  setupPing(serverUrl);
 });
